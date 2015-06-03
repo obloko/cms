@@ -21,3 +21,14 @@ Main tenants are:
  * API model abstraction
  * Code generation from API model abstraction
 4. Content and Code Management
+ * Content curation workflow configuration
+ * Publishing, Versioning, Version Tagging
+5. Import and Ingest
+ * Import job configuration
+ * Import data mapping tools
+ * Intergrations, Webhooks and callbacks
+ * Workflow tools
+6. Reports
+ * Reporting abstraction model
+ * Dashboards
+ * Spark integration
