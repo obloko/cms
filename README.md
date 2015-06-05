@@ -16,6 +16,7 @@ Main tenants are:
  * Table-driven schema visualization and management
  * Customizable per-type schema visualization and management 
  * Code generation from visual model abstraction
+ * Data and schema migration
 3. API generation
  * Automatic API generation based on models
  * API model abstraction
@@ -26,7 +27,7 @@ Main tenants are:
 5. Import and Ingest
  * Import job configuration
  * Import data mapping tools
- * Intergrations, Webhooks and callbacks
+ * Integrations, Webhooks and callbacks
  * Workflow tools
 6. Reports
  * Reporting abstraction model
