@@ -1,7 +1,7 @@
 import logging
 from django.conf import settings
 from mongoengine import connection
-import mongo_proxy
+import mongodb_proxy
 
 logger = logging.getLogger(__name__)
 
