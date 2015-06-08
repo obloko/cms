@@ -1,0 +1,21 @@
+{
+  "name": "schemas",
+  "version": "0.0.1",
+  "homepage": "https://github.com/obloko/cms",
+  "authors": [
+    "Matt Shaw <m@extc.co>"
+  ],
+  "description": "Schema editor",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  }
+}
