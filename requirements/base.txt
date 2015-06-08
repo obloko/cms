@@ -1,3 +1,4 @@
 django<1.9
 mongoengine #==0.9
 django-bootstrap3 #==5.4.0
+git+git://github.com/arngarden/MongoDBProxy.git@fcba9914275a7dbb69459783404aeb6aaa7c1b3b
