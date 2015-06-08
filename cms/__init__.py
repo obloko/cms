@@ -1,7 +1,7 @@
-import logger
+import logging
 from django.conf import settings
 from mongoengine import connection
-import mongodb_proxy
+import mongo_proxy
 
 logger = logging.getLogger(__name__)
 
@@ -11,6 +11,10 @@ def init_mongo_connection(settings_databases_conf):
     Initialize MongoDB connectivity
     '''
     for db_name, kwargs in settings_databases_conf.items():
+        if not db_name:
+            logger.info('Skipping empty mongodb name')
+            continue
+
         connection.connect(db_name, **kwargs)
         db_alias = kwargs['alias']
         # wrap the connections with the proxy which handles AutoReconnect

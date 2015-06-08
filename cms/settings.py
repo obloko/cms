@@ -81,7 +81,7 @@ DATABASES = {
     }
 }
 
-MONGO_DATABASES = {
+MONGODB_DATABASES = {
     '' : { #Database
         'alias': '', # Alias
         'host': '', # Hosts, multiple for replica set and HA
