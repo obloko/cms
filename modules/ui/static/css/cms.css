@@ -27,6 +27,19 @@ body {
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
     }
+    
+    .sidebar {
+        z-index: 1;
+        position: absolute;
+        width: 250px;
+        margin-top: 60px;
+    }
+
+    .navbar-top-links .dropdown-messages,
+    .navbar-top-links .dropdown-tasks,
+    .navbar-top-links .dropdown-alerts {
+        margin-left: auto;
+    }    
 }
 
 .navbar-top-links {
@@ -113,11 +126,7 @@ body {
     background-color: #273745;
 }
 
-.nav>li>a:focus {
-	background-color: #273745;
-}
-
-.nav > li > a.active {
+.sidebar ul li a.active {
 	border-left: 4px solid #19aa8d;
   	background: #293846;
 }
@@ -147,19 +156,15 @@ body {
     padding-left: 52px;
 }
 
-@media(min-width:768px) {
-    .sidebar {
-        z-index: 1;
-        position: absolute;
-        width: 250px;
-        margin-top: 51px;
-    }
+.navbar .breadcrumb {
+	height: 50px;
+	padding: 15px 15px;
+	font-size: 18px;
+	line-height: 20px;	
+}
 
-    .navbar-top-links .dropdown-messages,
-    .navbar-top-links .dropdown-tasks,
-    .navbar-top-links .dropdown-alerts {
-        margin-left: auto;
-    }
+.breadcrumb {
+  background-color: #ffffff;
 }
 
 .btn-outline {
