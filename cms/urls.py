@@ -20,6 +20,9 @@ urlpatterns = [
     
     url(r'^rdbms/edit-model.html$', TemplateView.as_view(template_name="rdbms/edit-model.html"), name='rdbms-edit-model'),
     url(r'^rdbms/create-model.html$', TemplateView.as_view(template_name="rdbms/create-model.html"), name='rdbms-create-model'),
+    url(r'^rdbms/browse/er.html$', TemplateView.as_view(template_name="rdbms/browse/er.html"), name='rdbms-er'),
+    url(r'^rdbms/browse/table.html$', TemplateView.as_view(template_name="rdbms/browse/table.html"), name='rdbms-table'),
+    url(r'^rdbms/browse/list.html$', TemplateView.as_view(template_name="rdbms/browse/list.html"), name='rdbms-list'),
     url(r'^rdbms/$', TemplateView.as_view(template_name="rdbms/rdbms.html"), name='rdbms-home'),
     
     url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),

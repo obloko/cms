@@ -19,17 +19,20 @@
       <ul class="nav navbar-nav">
         <li><a href="{% url 'rdbms-create-model' %}">Create New Model</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Browse <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Advanced Browse <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">ER Diagram</a></li>
-            <li><a href="#">Table View</a></li>
-            <li><a href="#">Simple List</a></li>
+            <li><a href="{% url 'rdbms-er' %}">ER Diagram</a></li>
+            <li><a href="{% url 'rdbms-table' %}">Tabled View</a></li>
           </ul>
         </li>
       </ul>
-   
-      
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+<div class="container-fluid">
+	
+	<div class="row">
+       <h2>Models</h2>
+    </div>
+</div>
 {% endblock %}            
