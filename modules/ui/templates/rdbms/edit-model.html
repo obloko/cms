@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<nav class="navbar navbar-static-top">
-	<div class="container-fluid">
-       <ol class="breadcrumb">
-           <li>
-               <a href="{% url 'home' %}">Home</a>
-           </li>
-           <li>Models</li>
-           <li>
-               <a href="{% url 'rdbms-home' %}">RDBMS</a>
-           </li>
-           <li class="active">
-               Edit <strong>Artist</strong> Model
-           </li>
-       </ol>
-	</div>
-</nav>
+<ul class="row nav nav-tabs dynotabs" role="tablist">
+  <li role="presentation"><a href="{% url 'rdbms-home' %}">RDBMS</a></li>
+  <li role="presentation"><a href="#">Database Setup</a></li>
+  <li role="presentation"><a href="#">Create New Model</a></li>
+  <li role="presentation"><a href="{% url 'rdbms-er' %}">E-R Diagram View</a></li>
+  <li role="presentation"><a href="{% url 'rdbms-table' %}">Tabled View</a></li>
+</ul>
+
+<div class="row wrapper border-bottom gray-bg page-heading">
+    <div class="col-lg-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="active">
+                <strong>RDBMS</strong>
+            </li>
+        </ol>
+    </div>
+</div>      
+
 {% endblock %}            
