@@ -1,4 +1,4 @@
-@import url("http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600,700&lang=en");
 /*!
  * Start Bootstrap - SB Admin 2 Bootstrap Admin Theme (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
@@ -21,7 +21,7 @@ body {
 #page-wrapper {
     padding: 0 15px;
     min-height: 900px;
-    background-color: #fff;
+    background-color: #F7F8F9;
 }
 
 @media(min-width:768px) {
@@ -49,13 +49,17 @@ body {
 	
 }
 
+.wrapper-content {
+  padding: 20px 10px 40px;
+}
+
 .nav-tabs>li>a {
 	border-radius: 0;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
 	border-top: 4px solid #19aa8d;
-	background-color: #F4F4F4;
+	background-color: #E7EAEC;
 }
 
 .navbar-fixed-top, .navbar-static-top {
@@ -200,10 +204,11 @@ body {
 .breadcrumb {
 	padding: 0;
 	margin-bottom: 0;
+	background-color: #E7EAEC;
 }
 
 .gray-bg {
-  background-color: #F4F4F4;
+  background-color: #E7EAEC;
 }
 
 .page-heading {
@@ -421,3 +426,63 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+/* custom panel, aka cpanel */
+.cpanel {
+	clear: both;
+	margin-bottom: 25px;
+	margin-top: 0;
+	padding: 0;
+}
+.cpanel-title {
+	background-color: #ffffff;
+	border-color: #e7eaec;
+	border-image: none;
+	border-style: solid solid none;
+	border-width: 4px 0px 0;
+	color: inherit;
+	margin-bottom: 0;
+	padding: 14px 15px 7px;
+	height: 48px;
+}
+.cpanel-content {
+	clear: both;
+	background-color: #ffffff;
+	color: inherit;
+	padding: 15px 20px 20px 20px;
+	border-color: #e7eaec;
+	border-image: none;
+	border-style: solid solid none;
+	border-width: 1px 0px;
+}
+.cpanel-title h5 {
+	display: inline-block;
+	font-size: 14px;
+	margin: 0 0 7px;
+	padding: 0;
+	text-overflow: ellipsis;
+	float: left;
+}
+.cpanel-tools {
+	display: inline-block;
+	float: right;
+	margin-top: 0;
+	position: relative;
+	padding: 0;
+}
+.cpanel-tools a {
+	cursor: pointer;
+	margin-left: 5px;
+	color: #c4c4c4;
+}
+
+
+
+
+
+
+
+
+
+
+

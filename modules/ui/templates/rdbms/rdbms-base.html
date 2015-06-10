@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block tabs %}
+<ul class="row nav nav-tabs dynotabs" role="tablist">
+  <li role="presentation"><a href="{% url 'rdbms-home' %}">RDBMS</a></li>
+  <li role="presentation"><a href="{% url 'rdbms-database-setup' %}">Database Setup</a></li>
+  <li role="presentation"><a href="{% url 'rdbms-create-model' %}">Create New Model</a></li>
+  <li role="presentation"><a href="{% url 'rdbms-er' %}">E-R Diagram View</a></li>
+  <li role="presentation"><a href="{% url 'rdbms-table' %}">Tabled View</a></li>
+</ul>
+{% endblock %}
