@@ -1,5 +1,7 @@
 {% extends 'rdbms/rdbms-base.html' %}
 
+{% load cms_ui_tags %}
+
 {% block content %}
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -16,6 +18,49 @@
             </li>
         </ol>
     </div>
-</div>      
+</div> 
+
+<div class="wrapper-content">
+	<div class="container-fluid">
+		{% for i in 20|get_range %}
+		<div class="col-lg-12">
+			<div class="cpanel">
+				<div class="panel-yellow cpanel-title">
+				    <h4>Artist</h4>
+					<div class="cpanel-tools">
+						<i class="fa fa-wrench"></i>
+					</div>				    
+				</div>
+				<div class="cpanel-content">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th class="col-lg-3">Field Name</td>
+								<th class="col-lg-2">Field Type</td>
+								<th class="col-lg-1">Size</td>
+								<th class="col-lg-2">Default Value</td>
+								<th class="col-lg-4">Other</td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for i in 20|get_random_range %}
+							<tr>
+								<td>{% random_string size=10 %}</td>
+								<td>{% random_string size=10 %}</td>
+								<td>{% random_number min=10 max=256 %}</td>
+								<td></td>
+								<td></td>
+							</tr>
+							{% endfor %}
+						</tbody>						
+					</table>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		
+		
+	</div>
+</div>     
 
 {% endblock %}      

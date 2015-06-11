@@ -21,7 +21,7 @@ body {
 #page-wrapper {
     padding: 0 15px;
     min-height: 900px;
-    background-color: #F7F8F9;
+    background-color: #F3F4F5;
 }
 
 @media(min-width:768px) {
@@ -58,7 +58,7 @@ body {
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-	border-top: 4px solid #19aa8d;
+	border-top: 4px solid #5cb85c;
 	background-color: #FFF;
 }
 
@@ -172,7 +172,7 @@ body {
 }
 
 .sidebar ul li a.active {
-	border-left: 4px solid #19aa8d;
+	border-left: 4px solid #5cb85c;
   	background: #293846;
 }
 
@@ -378,7 +378,7 @@ table.dataTable thead .sorting:after {
 }
 
 .panel-green {
-    border-color: #5cb85c;
+    border-color: #5cb85c !important;
 }
 
 .panel-green .panel-heading {
@@ -396,7 +396,7 @@ table.dataTable thead .sorting:after {
 }
 
 .panel-red {
-    border-color: #d9534f;
+    border-color: #d9534f !important;
 }
 
 .panel-red .panel-heading {
@@ -414,7 +414,7 @@ table.dataTable thead .sorting:after {
 }
 
 .panel-yellow {
-    border-color: #f0ad4e;
+    border-color: #f0ad4e !important;
 }
 
 .panel-yellow .panel-heading {
@@ -463,9 +463,12 @@ table.dataTable thead .sorting:after {
 	border-style: solid solid none;
 	border-width: 1px 0px;
 }
-.cpanel-title h5 {
+.cpanel-title h1, 
+.cpanel-title h2, 
+.cpanel-title h3, 
+.cpanel-title h4,
+.cpanel-title h5  {
 	display: inline-block;
-	font-size: 14px;
 	margin: 0 0 7px;
 	padding: 0;
 	text-overflow: ellipsis;
