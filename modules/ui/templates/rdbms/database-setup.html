@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div class="row wrapper border-bottom gray-bg page-heading">
-    <div class="col-lg-12">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-2">
         <ol class="breadcrumb">
             <li>
                 <a href="{% url 'home' %}">Home</a>
@@ -15,6 +15,9 @@
                 <strong>Database Setup</strong>
             </li>
         </ol>
+	</div>
+    <div class="col-lg-10 left-divider">
+    	<a href="#" data-toggle="modal" data-target="#dbSetupModal"><i class="fa fa-wrench fa-fw"></i> Add Database Setup</a>
     </div>
 </div>    
 <div class="wrapper-content">
@@ -30,6 +33,65 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- DB Setup Modal -->
+<div class="modal fade" id="dbSetupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Database Setup</h4>
+      </div>
+      <div class="modal-body">
+		<form>
+		  <div class="form-group">
+		    <label for="engine">Engine</label>
+		    <select class="form-control">
+			    <option value="mysql">Mysql</option>
+			    <option value="postgres">Postgres</option>
+			    <option value="oracle">Oracle</option>
+			    <option value="sap">SAP SQL Anywhere</option>
+			    <option value="ibm">IBM DB2</option>
+			    <option value="msft">Microsoft SQL Server</option>
+			    <option value="firebird">Firebird</option>
+			    <option value="odbc">ODBC</option>
+			    <option value="adsdb">ADSDB</option>
+			</select>
+		  </div>
+		  <div class="form-group">
+		    <label for="name">Host</label>
+		    <input type="text" class="form-control" placeholder="Host or IP">
+		  </div>	
+		  <div class="form-group">
+		    <label for="name">Port</label>
+		    <input type="text" class="form-control" placeholder="Leave empty to use default">
+		  </div>		  	  
+		  <div class="form-group">
+		    <label for="name">Database Name</label>
+		    <input type="text" class="form-control">
+		  </div>
+		  <div class="form-group">
+		    <label for="name">User</label>
+		    <input type="text" class="form-control">
+		  </div>
+		  <div class="form-group">
+		    <label for="name">Password</label>
+		    <input type="password" class="form-control">
+		  </div>
+		  <div class="form-group">
+		    <label for="name">Options</label>
+		    <textarea class="form-control" rows="3" placeholder="list of db specific options, for example: 'init_command': 'SET storage_engine=INNODB', 'timeout': 20,"></textarea>
+		  </div>
+		  
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}      
