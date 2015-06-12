@@ -1,3 +1,4 @@
+from django.contrib.staticfiles import finders
 from django import template
 import random, string
 
@@ -18,3 +19,13 @@ def random_number(min=10, max=256):
 @register.simple_tag
 def random_string(size=10):
     return ''.join(random.choice(string.lowercase) for i in range(size))
+
+@register.simple_tag
+def random_real_word(title=False):
+    words = finders.find('OFTENMIS.TXT')
+    if title:
+        return random.choice(open(words).readlines()).title()
+    else:
+        return random.choice(open(words).readlines())
+    
+    
