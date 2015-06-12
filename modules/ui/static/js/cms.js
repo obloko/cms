@@ -1,12 +1,14 @@
-$(function() {
-    $('#side-menu').metisMenu();
-
-});
-
 function cleanUrl(url) {
 	  str = ""+url;
 	  return str.split("?")[0].split("#")[0];
 	}
+
+
+$(function() {
+    $('#side-menu').metisMenu();
+    $.fn.editable.defaults.mode = 'inline';
+    $('.editable').editable('toggleDisabled');
+});
 
 //Loads the correct sidebar on window load,
 //collapses the sidebar on window resize.
@@ -24,3 +26,4 @@ $(function() {
     	return this.href == url;
     }).parent().addClass('active');
 });
+
