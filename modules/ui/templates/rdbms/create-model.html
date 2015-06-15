@@ -1,7 +1,26 @@
 {% extends 'rdbms/rdbms-base.html' %}
 
-{% block content %}
+{% block bootstrap3_footer_extra_script %}
+    <!-- backbone etc -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/templates/bootstrap3.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
+    <script src="/static/js/backbone-modal.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.4.1/backbone.marionette.min.js"></script>
+    <!-- backbone forms -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/backbone-forms.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/adapters/backbone.bootstrap-modal.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/editors/list.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/templates/bootstrap3.js"></script>
+{% endblock %}
 
+{% block content %}
+<style type="text/css">
+    #fields table .field-name { font-size: 1.2em; }
+    .selected-options a.btn { color: #424242; font-size: 1.2em; background: #c1c1c1; padding: 6px 13px; float: left; margin-right: 10px; }
+    .selected-options a.btn:hover { text-decoration: none; background: #5cb85c; }
+
+</style>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
         <ol class="breadcrumb">
@@ -17,5 +36,174 @@
         </ol>
     </div>
 </div>      
+
+<div id="content" class="container">
+    <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active" role="presentation"><a aria-controls="home" data-toggle="tab" href="#home" role="tab">Fields</a></li>
+            <li role="presentation"><a aria-controls="profile" data-toggle="tab" href="#profile" role="tab">Options</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div id="fields-tab" class="tab-pane active" role="tabpanel"></div>
+            <div id="options-tab" class="tab-pane" role="tabpanel"></div>
+        </div>
+    </div>
+    <button class="btn btn-primary add-field-btn">Add Field</button>
+</div>
+
+
+<!---
+
+Templates
+
+-->
+<script id="field-list-tmpl" type="text/template">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</script>
+<script id="field-row-tmpl" type="text/template">
+    <td class="field-name">
+        <%-o.name %>
+    </td>
+    <td>
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <%-o.type %>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <% for (var i in FIELD_TYPES) { %>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><%-FIELD_TYPES[i]%></a></li>
+                <% } %>
+            </ul>
+        </div>
+    </td>
+    <td class="selected-options">
+        <% for (var name in o.options) {%>
+            <a class="btn btn-default" href="javascript:void(0)"><%-name %>: <%-o.options[name] %></a>
+        <% } %>
+        <a class="btn btn-default" href="javascript:void(0)">+</a>
+    </td>
+</script>
+
+
+<script type="text/javascript">
+
+    var FIELD_TYPES = [
+        'Text Field',
+        'Char Field',
+        'Boolean Field',
+        'File Field',
+    ];
+
+    $(function(){
+
+        function init(){
+            _.templateSettings.variable = "o";
+            
+            var app = new Backbone.Marionette.Application();
+            app.addRegions({
+              fields_region: '#fields-tab'
+            });
+            app.addInitializer(function(options){
+                var view = new FieldListView({
+                    collection: options.fields
+                });
+                app.fields_region.show(view);
+            });
+
+            // Dummy data
+            var fields = new FieldList([
+                {name:'id', type:'Primary Key', options:{auto_increment:true, something: 'else'}},
+                {name:'udid', type:'Text Field', options:{}},
+                {name:'name', type:'Char Field', options:{max_length: 255, db_index: true}},
+            ]);
+
+            app.start({fields: fields});
+
+            $('.add-field-btn').click(showAddField);
+
+        }
+
+        function showAddField(){
+            var form = new Backbone.Form({model: new Field()}).render();
+            new FieldModal({body: form.el.innerHTML}).render();
+        }
+
+        // Modals
+        var FieldModal = Backbone.ModalView.extend({
+            title: "<h3>Add Field</h3>",
+            buttons: [
+                { className: "btn-default cancel", label: "Cancel", close: true },
+                { className: "btn-primary save", label: "Save" }],
+            events: {
+                "click .modal-footer a.save": "onSave",
+                "click .modal-footer a.cancel": "onCancel",
+                "hidden.bs.modal": "onHidden"
+            },
+            postRender: function() {
+                // this.$body.append($h4).append($p);
+                return this;
+            },
+            onSave: function(e) {
+                e.preventDefault();
+                
+            },
+            onCancel: function(e) {
+                
+            },
+            onHidden: function(e) {
+                
+            }
+        });
+    
+        // Models
+        var Field = Backbone.Model.extend({
+            schema: {
+                name: 'Text',
+                type: { type: 'Select', options: FIELD_TYPES }
+            }
+        });
+
+        var FieldList = Backbone.Collection.extend({
+            model: Field
+        });
+
+        // Views
+        var FieldView = Backbone.Marionette.ItemView.extend({
+            template: '#field-row-tmpl',
+            tagName: 'tr',
+            className: 'field-row',
+            initialize: function(){ console.log('FieldView: initialize ' + this.model.get('name')) },
+            onRender: function(){ console.log('FieldView: onRender ' + this.model.get('name')) },
+            onShow: function(){ console.log('FieldView: onShow ' + this.model.get('name')) }
+        });
+        var FieldListView = Backbone.Marionette.CollectionView.extend({
+            id: 'field-list',
+            tagName: 'table',
+            className: "table",
+            template: "#field-list-tmpl",
+            childView: FieldView,
+            appendHtml: function(collectionView, itemView){
+                collectionView.$("tbody").append(itemView.el);
+            },
+            initialize: function(){ console.log('FieldListView: initialize') },
+            onRender: function(){ console.log('FieldListView: onRender') },
+            onShow: function(){ console.log('FieldListView: onShow') }
+        });
+
+        init();
+    });
+
+</script>
 
 {% endblock %}          
