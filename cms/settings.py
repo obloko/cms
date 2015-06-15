@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'bootstrap3',
     'cms',
     'ui',
-    'schemas',
 )
 
 MIDDLEWARE_CLASSES = (
