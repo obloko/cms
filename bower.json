@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "homepage": "https://github.com/obloko/cms",
   "authors": [
-    "boinc.com"
+    "obloko.com"
   ],
-  "license": "MIT",
+  "license": "GPL-3.0",
   "ignore": [
     "**/.*",
     "node_modules",
