@@ -307,6 +307,10 @@ body {
     font-size: 40px;
 }
 
+.panel {
+	border-radius: 0px;
+}
+
 .panel-green {
     border-color: #5cb85c !important;
 }
@@ -420,4 +424,9 @@ body {
 .inline-block {
 	display: inline-block;
   	width: 100%;
+}
+
+.nogap {
+	padding-left: 0px;
+	padding-right: 0px;
 }
