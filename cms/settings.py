@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'pipeline',
     'bootstrap3',
     'cms',
     'ui',
@@ -111,4 +112,44 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'modules','ui','static')
 STATIC_URL = '/static/'
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
+
+STATICFILES_DIRS = (
+    os.path.join(STATIC_ROOT,'js','components'),
+)
+
+
+PIPELINE_CSS = {
+  'components':  {
+    'source_filenames': (
+      '*.css',
+      'backbone-forms/distribution/templates/bootstrap3.css',
+    ),
+    'output_filename': 'css/components.css',
+  },
+}
+
+PIPELINE_JS = {
+  'components': {
+    'source_filenames': (
+      'underscore/underscore.js',
+      'backbone/backbone.js',
+      'backbone-forms/distribution/backbone-forms.js',
+      'backbone-forms/distribution/adapters/backbone.bootstrap-modal.js',
+      'backbone-forms/distribution/editors/list.js',
+      'backbone-forms/distribution/templates/bootstrap3.js',
+      'backbone-bootstrap-widgets/src/backbone-modal.js',
+      'marionette/lib/backbone.marionette.js',
+    ),
+    'output_filename': 'js/components.js',
+  },
+}

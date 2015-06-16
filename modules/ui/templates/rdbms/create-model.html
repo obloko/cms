@@ -1,18 +1,23 @@
 {% extends 'rdbms/rdbms-base.html' %}
+{% load pipeline %}
 
 {% block bootstrap3_footer_extra_script %}
-    <!-- backbone etc -->
+
+    {% stylesheet 'components' %}
+    {% javascript 'components' %}
+
+
+    <!-- backbone etc 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/templates/bootstrap3.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
     <script src="/static/js/backbone-modal.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.4.1/backbone.marionette.min.js"></script>
-    <!-- backbone forms -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.4.1/backbone.marionette.min.js"></script>-->
+    <!-- backbone forms 
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/backbone-forms.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/adapters/backbone.bootstrap-modal.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/editors/list.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/templates/bootstrap3.js"></script>
-    <script src="/static/js/cms.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/templates/bootstrap3.js"></script>-->
 {% endblock %}
 
 {% block content %}
