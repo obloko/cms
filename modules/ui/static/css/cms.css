@@ -53,7 +53,7 @@ body {
   padding: 20px 10px 40px;
 }
 
-.nav-tabs>li>a {
+.nav-tabs>li>a, .nav-pills>li>a {
 	border-radius: 0;
 }
 
@@ -417,13 +417,7 @@ body {
 	color: #c4c4c4;
 }
 
-
-
-
-
-
-
-
-
-
-
+.inline-block {
+	display: inline-block;
+  	width: 100%;
+}
