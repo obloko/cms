@@ -57,6 +57,20 @@ body {
 	border-radius: 0;
 }
 
+.white-right-nav-pills>li.active>a, 
+.white-right-nav-pills>li.active>a:focus, 
+.white-right-nav-pills>li.active>a:hover {
+	color: #337AB7;
+	background-color: #FFF;
+	z-index: 1000;
+	margin-left: -1px;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	border-left: 0;
+	font-weight: 700;
+}
+
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
 	border-top: 4px solid #5cb85c;
 	background-color: #FFF;
