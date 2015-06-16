@@ -127,6 +127,9 @@ STATICFILES_DIRS = (
     os.path.join(STATIC_ROOT,'js','components'),
 )
 
+PIPELINE_ENABLED = True
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 
 PIPELINE_CSS = {
   'components':  {
