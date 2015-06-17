@@ -1,21 +1,17 @@
 {% extends 'rdbms/rdbms-base.html' %}
-{% load pipeline %}
+{% load pipeline cms_ui_libs %}
 
 {% block bootstrap3_footer_extra_script %}
+    {{ block.super }}
 
-    {% stylesheet 'components' %}
-    {% javascript 'components' %}
-    <!-- backbone etc 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/templates/bootstrap3.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
-    <script src="/static/js/backbone-modal.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.4.1/backbone.marionette.min.js"></script>-->
-    <!-- backbone forms 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/backbone-forms.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/adapters/backbone.bootstrap-modal.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/editors/list.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.0/templates/bootstrap3.js"></script>-->
+    {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
+    {% require_ui_lib 'marionette' %}
+    {% require_ui_lib 'backbone-forms' %}
+    {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.js' %}
+    {% require_ui_file 'backbone-forms/distribution/adapters/backbone.bootstrap-modal.min.js' %}
+    {% require_ui_file 'backbone-forms/distribution/editors/list.min.js' %}
+    {% require_ui_file 'backbone-modal.js' %}
+
 {% endblock %}
 
 {% block content %}
@@ -198,7 +194,7 @@ Templates
         var FieldListView = Backbone.Marionette.CollectionView.extend({
             id: 'field-list',
             tagName: 'table',
-            className: "table",
+            className: "table borderless",
             template: "#field-list-tmpl",
             childView: FieldView,
             appendHtml: function(collectionView, itemView){

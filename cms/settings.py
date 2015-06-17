@@ -1,3 +1,4 @@
+import sys
 """
 Django settings for cms project.
 
@@ -115,44 +116,45 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'modules','ui','static')
 STATIC_URL = '/static/'
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+# Relative to STATIC_ROOT!
+JS_COMPONENTS_DIR = os.path.join('js','components')
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
-)
-
-STATICFILES_DIRS = (
-    os.path.join(STATIC_ROOT,'js','components'),
-)
-
-PIPELINE_ENABLED = True
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
-
-PIPELINE_CSS = {
-  'components':  {
-    'source_filenames': (
-      '*.css',
-      'backbone-forms/distribution/templates/bootstrap3.css',
-    ),
-    'output_filename': 'css/components.css',
-  },
-}
-
-PIPELINE_JS = {
-  'components': {
-    'source_filenames': (
-      'underscore/underscore.js',
-      'backbone/backbone.js',
-      'backbone-forms/distribution/backbone-forms.js',
-      'backbone-forms/distribution/adapters/backbone.bootstrap-modal.js',
-      'backbone-forms/distribution/editors/list.js',
-      'backbone-forms/distribution/templates/bootstrap3.js',
-      'backbone-bootstrap-widgets/src/backbone-modal.js',
-      'marionette/lib/backbone.marionette.js',
-    ),
-    'output_filename': 'js/components.js',
-  },
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s.%(funcName)s: %(message)s'
+        },
+    },
+    'handlers': {
+        # 'default': {
+        #     'level':'DEBUG',
+        #     'class':'logging.FileHandler',
+        #     'filename': '/var/log/api/v3api.log',
+        #     'formatter':'standard',
+        # },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+            'stream': sys.stdout,
+        },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+    }
 }
