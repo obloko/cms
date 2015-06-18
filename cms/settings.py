@@ -32,14 +32,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'bootstrap3',
     'cms',
     'ui',
 )
@@ -116,7 +114,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'modules','ui','stat
 STATIC_URL = '/static/'
 
 # Relative to STATIC_ROOT!
-JS_COMPONENTS_DIR = os.path.join('js','components')
+JS_COMPONENTS_DIR = os.path.join('bower','components')
 
 LOGGING = {
     'version': 1,

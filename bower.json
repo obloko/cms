@@ -10,7 +10,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "modules/ui/static/js/components/",
+    "modules/ui/static/bower/components/",
     "test",
     "tests"
   ],
@@ -21,7 +21,10 @@
     "marionette": "~2.4.1",
     "backbone-forms": "~0.14.0",
     "bootstrap": "~3.3.5",
-    "backbone-bootstrap-widgets": "https://github.com/AmiliaApp/backbone-bootstrap-widgets.git"
+    "backbone-bootstrap-widgets": "https://github.com/AmiliaApp/backbone-bootstrap-widgets.git",
+    "metisMenu": "~2.0.2",
+    "font-awesome": "~4.3.0",
+    "x-editable": "~1.5.1" 
   },
   "resolutions": {
     "underscore": "~1.8.3",

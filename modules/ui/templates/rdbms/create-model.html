@@ -1,7 +1,7 @@
 {% extends 'rdbms/rdbms-base.html' %}
 {% load cms_ui_libs %}
 
-{% block bootstrap3_footer_extra_script %}
+{% block body_footer_extra_script %}
     {{ block.super }}
 
     {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
@@ -10,7 +10,7 @@
     {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.js' %}
     {% require_ui_file 'backbone-forms/distribution/adapters/backbone.bootstrap-modal.min.js' %}
     {% require_ui_file 'backbone-forms/distribution/editors/list.min.js' %}
-    {% require_ui_file 'backbone-modal.js' %}
+    {% require_ui_file 'custom/backbone-modal.js' %}
 
 {% endblock %}
 

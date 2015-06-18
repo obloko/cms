@@ -1,7 +1,7 @@
 {% extends 'rdbms/rdbms-base.html' %}
 
 {% load cms_ui_tags %}
-
+{% load cms_ui_libs %}
 {% block content %}
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -66,4 +66,9 @@
 	</div>
 </div>
 
+{% endblock %}
+
+{% block body_footer_extra_script %}
+{% require_ui_file 'x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css' %}
+{% require_ui_file 'x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js' %}
 {% endblock %}      

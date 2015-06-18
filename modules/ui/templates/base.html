@@ -1,18 +1,35 @@
-{% extends 'bootstrap.html' %}
-
+<!DOCTYPE html>
+{% load cms_ui_libs %}
 {% load url from future %}
+<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 
-{% load bootstrap3 %}
+<head>
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
 
-{% block bootstrap3_extra_head %}
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.0.1/metisMenu.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/css/cms.css">
+	{% require_ui_lib 'jquery' %}
+	{% require_ui_file 'bootstrap/dist/css/bootstrap.css' %}
+	{% require_ui_file 'bootstrap/dist/js/bootstrap.js' %}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    {% block html_extra_head %}{% endblock %}	
+	{% require_ui_lib 'metisMenu' %}
+	{% require_ui_lib 'font-awesome' %}
 
-{% endblock %}
+	<link rel="stylesheet" href="/static/css/cms.css">
 
-{% block bootstrap3_content %}
+</head>
+
+<body>
+
+{% block body_content %}
     <div id="wrapper">
 
         <div class="navbar-default sidebar" role="navigation">
@@ -73,7 +90,8 @@
 
 {% endblock %}
 
-{% block bootstrap3_extra_script %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.0.1/metisMenu.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-{% endblock %}
+{% block body_footer_extra_script %}{% endblock %}
+<script src="/static/js/cms.js"></script>
+</body>
+
+</html>

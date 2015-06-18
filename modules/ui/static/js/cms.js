@@ -6,8 +6,11 @@ function cleanUrl(url) {
 
 $(function() {
     $('#side-menu').metisMenu();
-    $.fn.editable.defaults.mode = 'inline';
-    $('.editable').editable('toggleDisabled');
+    if ('editable' in $.fn) { 
+    	$.fn.editable.defaults.mode = 'inline';
+    	$('.editable').editable('toggleDisabled');
+    }
+    
 });
 
 //Loads the correct sidebar on window load,
