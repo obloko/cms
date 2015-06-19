@@ -444,3 +444,33 @@ body {
 	padding-left: 0px;
 	padding-right: 0px;
 }
+
+rect {
+	fill: #fff;
+	stroke: #ccc;
+stroke-width: 1px;
+}
+
+svg text {
+	font-family:"open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+svg text.uml-class-name-text {
+	fill: #fff !important;
+}
+
+.Interface rect.uml-class-name-rect {
+	fill: #B71C1C !important;
+}
+
+.Abstract rect.uml-class-name-rect {
+	fill: #E65100 !important;
+}
+
+.Class rect.uml-class-name-rect {
+	fill: #1B5E20 !important;
+}
+
+
+
+
