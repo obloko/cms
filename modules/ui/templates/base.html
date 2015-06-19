@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 {% load cms_ui_libs %}
 {% load url from future %}
+{% load compress %}
 <html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 
 <head>
     <meta charset="utf-8">
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}CMS{% endblock %}</title>
 
-	{% require_ui_lib 'jquery' %}
-	{% require_ui_file 'bootstrap/dist/css/bootstrap.css' %}
-	{% require_ui_file 'bootstrap/dist/js/bootstrap.js' %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -19,11 +17,13 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     
-    {% block html_extra_head %}{% endblock %}	
-	{% require_ui_lib 'metisMenu' %}
-	{% require_ui_lib 'font-awesome' %}
-
-	<link rel="stylesheet" href="/static/css/cms.css">
+	{% compress css %}
+		{% require_ui_file 'bootstrap/dist/css/bootstrap.css' %}
+		{% require_ui_css 'metisMenu' %}
+		{% require_ui_css 'font-awesome' %}
+		{% block html_extra_head %}{% endblock %}
+		<link rel="stylesheet" href="/static/css/cms.css">
+	{% endcompress %}
 
 </head>
 
@@ -90,8 +90,19 @@
 
 {% endblock %}
 
+{% compress js %}
+	{% require_ui_js 'jquery' %}
+	{% require_ui_file 'bootstrap/dist/js/bootstrap.js' %}
+	{% require_ui_js 'metisMenu' %}	
+{% endcompress %}
+
+{% comment %} This (body_footer_extra_script) block should not be inside compress tag, because not everything is compressible {% endcomment %}
 {% block body_footer_extra_script %}{% endblock %}
+
+{% compress js %}
 <script src="/static/js/cms.js"></script>
+{% endcompress %}	
+
 </body>
 
 </html>

@@ -1,26 +1,22 @@
 {% extends 'rdbms/rdbms-base.html' %}
 {% load cms_ui_libs %}
+{% load compress %}
 
-{% block body_footer_extra_script %}
-    {{ block.super }}
+{% block html_extra_head %}
+	{{ block.super }}
+	{% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
 
-    {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
-    {% require_ui_lib 'marionette' %}
-    {% require_ui_lib 'backbone-forms' %}
-    {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.js' %}
-    {% require_ui_file 'backbone-forms/distribution/adapters/backbone.bootstrap-modal.min.js' %}
-    {% require_ui_file 'backbone-forms/distribution/editors/list.min.js' %}
-    {% require_ui_file 'custom/backbone-modal.js' %}
+	<style type="text/css">
+	    #fields table .field-name { font-size: 1.2em; }
+	    .selected-options a.btn { color: #424242; font-size: 1.2em; background: #c1c1c1; padding: 6px 13px; float: left; margin-right: 10px; }
+	    .selected-options a.btn:hover { text-decoration: none; background: #5cb85c; }
+	
+	</style>
 
 {% endblock %}
 
 {% block content %}
-<style type="text/css">
-    #fields table .field-name { font-size: 1.2em; }
-    .selected-options a.btn { color: #424242; font-size: 1.2em; background: #c1c1c1; padding: 6px 13px; float: left; margin-right: 10px; }
-    .selected-options a.btn:hover { text-decoration: none; background: #5cb85c; }
 
-</style>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
         <ol class="breadcrumb">
@@ -99,8 +95,23 @@ Templates
     </td>
 </script>
 
+{% endblock %}
 
-<script type="text/javascript">
+{% block body_footer_extra_script %}
+    {% compress js %}
+	    {{ block.super }}
+	    
+	    {% require_ui_js 'marionette' %}
+	    {% require_ui_js 'backbone-forms' %}
+	    {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.js' %}
+	    {% require_ui_file 'backbone-forms/distribution/adapters/backbone.bootstrap-modal.js' %}
+	    {% require_ui_file 'backbone-forms/distribution/editors/list.js' %}
+    {% endcompress %}
+    
+    {% comment %} backbone-modal.js can not be minified/compressed, has some problems. Need to resolve! {% endcomment %}
+    {% require_ui_file 'custom/backbone-modal.js' %}
+    
+    <script type="text/javascript">
 
     var FIELD_TYPES = [
         'Text Field',

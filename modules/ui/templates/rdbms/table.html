@@ -68,7 +68,12 @@
 
 {% endblock %}
 
+{% block html_extra_head %}
+	{{ block.super }}
+	{% require_ui_file 'x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css' %}
+{% endblock %}	
+
 {% block body_footer_extra_script %}
-{% require_ui_file 'x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css' %}
-{% require_ui_file 'x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js' %}
+	{{ block.super }}	
+	{% require_ui_file 'x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js' %}
 {% endblock %}      

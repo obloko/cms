@@ -6,14 +6,19 @@ _log = logging.getLogger(__name__)
 register = template.Library()
 
 @register.simple_tag(takes_context=True)
-def require_ui_lib(context, lib):
-    ''' Include a bower compontents and all it's dependencies '''
-    # Keep track of dependencies discovered to avoid duplicate dependencies being added, at least within same context
-    libs = context.get('_require_ui_libs',[])
-    context['_require_ui_libs'] = libs
-    files = _get_lib_files(lib, exclude=libs)
-    libs += files
-    return '<!-- %s -->\n%s' % (lib,_get_files_html(files))
+def require_ui_lib(context, lib, include_all=False):
+    return _require_ui_lib(context, lib, include_all=include_all)
+
+# following 2 tags are meant to separate css and js, if places in different sections or 
+# need to be split in order to be compressed  
+@register.simple_tag(takes_context=True)
+def require_ui_css(context, lib, include_all=False):
+    return _require_ui_lib(context, lib, include_all=include_all, filter_type=('.css'))
+
+@register.simple_tag(takes_context=True)
+def require_ui_js(context, lib, include_all=False):
+    return _require_ui_lib(context, lib, include_all=include_all, filter_type=('.js'))
+
 
 @register.simple_tag
 def require_ui_file(path):
@@ -23,7 +28,19 @@ def require_ui_file(path):
 
 # Utils
 
-def _get_lib_files(name, version=0, libs=None, exclude=[]):
+def _require_ui_lib(context, lib, include_all=False, filter_type=('.js','.css')):
+    ''' Include a bower compontents and all it's dependencies '''
+    # Keep track of dependencies discovered to avoid duplicate dependencies being added, at least within same context
+    content_name = '_require_ui_libs'+''.join(filter_type)
+    
+    libs = context.get(content_name,[])
+    context[content_name] = libs
+    files = _get_lib_files(lib, exclude=libs, include_all=include_all, filter_type=filter_type)
+    libs += files
+    return '<!-- %s -->\n%s' % (lib,_get_files_html(files))
+
+
+def _get_lib_files(name, version=0, libs=None, exclude=[], include_all=False, filter_type=('.js','.css')):
     '''
     No way to know what optional files of JS modules to include. Use require_ui_file for that.
     '''
@@ -56,7 +73,7 @@ def _get_lib_files(name, version=0, libs=None, exclude=[]):
 
             for mf in main_files:
                 # Cheap way to ignore .less files, etc
-                if mf.endswith('.js') or mf.endswith('.css'):
+                if include_all or mf.endswith(filter_type):
                     mfp = os.path.join(rpath,mf.strip('./'))
                     # Make sure this lib is not already in the list
                     if mfp not in libs and mfp not in exclude:

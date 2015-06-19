@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'cms',
     'ui',
+    "compressor",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -112,6 +113,16 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'modules','ui','static')
 STATIC_URL = '/static/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+# Force enable, to test and make sure it works when django is NOT in DEBUG mode
+# By default, COMPRESS_ENABLED is set to NOT DEBUG
+#COMPRESS_ENABLED = True
 
 # Relative to STATIC_ROOT!
 JS_COMPONENTS_DIR = os.path.join('bower','components')
