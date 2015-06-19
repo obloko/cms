@@ -24,7 +24,8 @@
     "backbone-bootstrap-widgets": "https://github.com/AmiliaApp/backbone-bootstrap-widgets.git",
     "metisMenu": "~2.0.2",
     "font-awesome": "~4.3.0",
-    "x-editable": "~1.5.1" 
+    "x-editable": "~1.5.1",
+    "jointjs":"~0.9.3"
   },
   "resolutions": {
     "underscore": "~1.8.3",
