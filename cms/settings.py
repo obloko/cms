@@ -88,9 +88,9 @@ DATABASES = {
 
 MONGODB_DATABASES = {
     'schema' : { #Database
-        'alias': 'schema_alias', # Alias
-        'host': 'localhost', # Hosts, multiple for replica set and HA
-        #'replicaSet': '', # MongoReplicaSetClient will be used, instead of MongoClient by mongoengine
+        'alias': '', # Alias
+        'host': '', # Hosts, multiple for replica set and HA
+        'replicaSet': '', # MongoReplicaSetClient will be used, instead of MongoClient by mongoengine
     },
 }
 
@@ -113,3 +113,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+try:
+    from cms.local_settings import *
+except Exception, e:
+    # I'm raising an error here because you could accidentally run against prod servers
+    #if prod servers are in settings.py and local_settings.py isn't found OR is local_settings.py simply has a syntax error!
+    raise Exception("Error importing local_settings.py: %s" % e)
