@@ -15,11 +15,11 @@ def init_mongo_connection(settings_databases_conf):
             logger.info('Skipping empty mongodb name')
             continue
 
-        if kwargs['disabled']:
+        if kwargs.get('disabled'):
             logger.info('Skipping disabled MongoDB configuration for "%s"' % db_name)
             continue
 
-        if not kwargs['alias'] or kwargs['host']:
+        if not kwargs.get('alias') or not kwargs.get('host'):
             raise RuntimeError('MongoDB configuration for "%s" needs to specify alias and host' % db_name) 
         
         connection.connect(db_name, **kwargs)
