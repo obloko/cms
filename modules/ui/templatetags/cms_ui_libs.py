@@ -13,11 +13,11 @@ def require_ui_lib(context, lib, include_all=False):
 # need to be split in order to be compressed  
 @register.simple_tag(takes_context=True)
 def require_ui_css(context, lib, include_all=False):
-    return _require_ui_lib(context, lib, include_all=include_all, filter_type=('.css'))
+    return _require_ui_lib(context, lib, include_all=include_all, filter_type=('.css',))
 
 @register.simple_tag(takes_context=True)
 def require_ui_js(context, lib, include_all=False):
-    return _require_ui_lib(context, lib, include_all=include_all, filter_type=('.js'))
+    return _require_ui_lib(context, lib, include_all=include_all, filter_type=('.js',))
 
 
 @register.simple_tag
