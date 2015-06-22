@@ -15,6 +15,13 @@ def init_mongo_connection(settings_databases_conf):
             logger.info('Skipping empty mongodb name')
             continue
 
+        if kwargs['disabled']:
+            logger.info('Skipping disabled MongoDB configuration for "%s"' % db_name)
+            continue
+
+        if not kwargs['alias'] or kwargs['host']:
+            raise RuntimeError('MongoDB configuration for "%s" needs to specify alias and host' % db_name) 
+        
         connection.connect(db_name, **kwargs)
         db_alias = kwargs['alias']
         # wrap the connections with the proxy which handles AutoReconnect
