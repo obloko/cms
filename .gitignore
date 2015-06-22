@@ -1,1 +1,2 @@
 *.pyc
+cms/local_settings.py
