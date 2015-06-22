@@ -27,4 +27,6 @@ urlpatterns = [
     url(r'^rdbms/$', TemplateView.as_view(template_name="rdbms/rdbms.html"), name='rdbms-home'),
     
     url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),
+    
+    url(r'^swagger/', include('rest_framework_swagger.urls')),
 ]
