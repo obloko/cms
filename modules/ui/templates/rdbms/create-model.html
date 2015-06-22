@@ -77,7 +77,7 @@ Templates
     <td>
         <div class="dropdown">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                <%-o.type %>
+                <%-o.kind %>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
@@ -88,8 +88,8 @@ Templates
         </div>
     </td>
     <td class="selected-options">
-        <% for (var name in o.options) {%>
-            <a class="btn btn-default" href="javascript:void(0)"><%-name %>: <%-o.options[name] %></a>
+        <% for (var name in o.kwargs) {%>
+            <a class="btn btn-default" href="javascript:void(0)"><%-name %>: <%-o.kwargs[name] %></a>
         <% } %>
         <a class="btn btn-default" href="javascript:void(0)">+</a>
     </td>
@@ -110,6 +110,7 @@ Templates
     
         <script type="text/javascript">
 
+        // TODO: need a way to get all available field types
         var FIELD_TYPES = [
             'Text Field',
             'Char Field',
@@ -117,8 +118,55 @@ Templates
             'File Field',
         ];
 
-        $(function(){
+        var current_schema = {
+            "name" : "Album",
+            "app_name" : "album",
+            "module" : "modules.album",
+            "attributes" : [ 
+                {
+                    "name" : "first_name",
+                    "kind" : "CharField",
+                    "args" : [],
+                    "kwargs" : {}
+                }, 
+                {
+                    "name" : "date_joined",
+                    "kind" : "DateTimeField",
+                    "args" : [],
+                    "kwargs" : {
+                        "auto_now_add" : true
+                    }
+                }
+            ],
+            "relations" : [ 
+                {
+                    "name" : "album",
+                    "kind" : "ForeignKey",
+                    "args" : [ 
+                        "self"
+                    ],
+                    "kwargs" : {}
+                }
+            ],
+            "inheritance" : [ 
+                "Model"
+            ],
+            "managers" : [ 
+                {
+                    "name" : "objects",
+                    "kind" : "Manager",
+                    "args" : [],
+                    "kwargs" : {}
+                }
+            ],
+            "metadata" : {
+                "managed" : false,
+                "verbose_name" : "Album model"
+            }
+        };
 
+        $(function(){
+            var schema_fields;
             function init(){
                 _.templateSettings.variable = "o";
                 
@@ -134,23 +182,46 @@ Templates
                 });
 
                 // Dummy data
-                var fields = new FieldList([
-                    {name:'id', type:'Primary Key', options:{auto_increment:true, something: 'else'}},
-                    {name:'udid', type:'Text Field', options:{}},
-                    {name:'name', type:'Char Field', options:{max_length: 255, db_index: true}},
-                ]);
+                schema_fields = new FieldList(_.union(current_schema.attributes,current_schema.relations));
 
-                app.start({fields: fields});
+                app.start({fields: schema_fields});
 
-                $('.add-field-btn').click(showAddField);
+                $('.add-field-btn').click(showAddFieldForm);
 
             }
 
-            function showAddField(){
-                var form = new Backbone.Form({model: new Field()}).render();
-                new FieldModal({body: form.el.innerHTML}).render();
-            }
+            function showAddFieldForm(){
+                var field = new Field();
+                var bbform = new Backbone.Form({model: field}).render();
+                var modal = new FieldModal({body: bbform.$el}).render();
 
+                bbform.on('change', function(model, name) {
+                    console.log("change arguments:", arguments);
+                });
+                bbform.$el.on('submit', function(e) {
+                    e.preventDefault();
+                    var errors = bbform.commit();
+                    console.log("errors:", errors);
+                    if (!errors){
+                        bbform.model.attributes.kwargs = JSON.parse(bbform.model.attributes.kwargs);
+                        schema_fields.add(bbform.model);
+                        modal.close();
+                    }
+                });
+            }
+            function validateJSON(s){
+                // retrn nothing if OK
+                if (typeof(s) == 'string' && s.trim().length){
+                    try {
+                        JSON.parse(s);
+                    } catch (e){
+                        return {
+                            type: 'json',
+                            message: 'JSON ' + String(e)
+                        };
+                    }
+                }
+            }
             // Modals
             var FieldModal = Backbone.ModalView.extend({
                 title: "<h3>Add Field</h3>",
@@ -168,7 +239,7 @@ Templates
                 },
                 onSave: function(e) {
                     e.preventDefault();
-                    
+                    this.$el.find('form').submit();
                 },
                 onCancel: function(e) {
                     
@@ -177,12 +248,14 @@ Templates
                     
                 }
             });
-        
+            
             // Models
             var Field = Backbone.Model.extend({
+                // schema is for backbone-forms
                 schema: {
-                    name: 'Text',
-                    type: { type: 'Select', options: FIELD_TYPES }
+                    name: { type: 'Text', validators: ['required'] },
+                    kind: { type: 'Select', validators: ['required'], options: FIELD_TYPES },
+                    kwargs: { type:'Text', validators:[validateJSON] }
                 }
             });
 
