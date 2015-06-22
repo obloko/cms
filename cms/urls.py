@@ -17,5 +17,14 @@ from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^', TemplateView.as_view(template_name="index.html"), name='index'),
+    
+    url(r'^rdbms/edit-model.html$', TemplateView.as_view(template_name="rdbms/edit-model.html"), name='rdbms-edit-model'),
+    url(r'^rdbms/create-model.html$', TemplateView.as_view(template_name="rdbms/create-model.html"), name='rdbms-create-model'),
+    url(r'^rdbms/database-setup.html$', TemplateView.as_view(template_name="rdbms/database-setup.html"), name='rdbms-database-setup'),
+    url(r'^rdbms/er.html$', TemplateView.as_view(template_name="rdbms/er.html"), name='rdbms-er'),
+    url(r'^rdbms/table.html$', TemplateView.as_view(template_name="rdbms/table.html"), name='rdbms-table'),
+    url(r'^rdbms/list.html$', TemplateView.as_view(template_name="rdbms/list.html"), name='rdbms-list'),
+    url(r'^rdbms/$', TemplateView.as_view(template_name="rdbms/rdbms.html"), name='rdbms-home'),
+    
+    url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),
 ]

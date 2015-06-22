@@ -1,35 +1,57 @@
-{% extends 'bootstrap.html' %}
+<!DOCTYPE html>
+{% load cms_ui_libs %}
 
-{% load url from future %}
+{% load compress %}
+<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 
-{% load bootstrap3 %}
+<head>
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CMS{% endblock %}</title>
 
-{% block bootstrap3_extra_head %}
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.0.1/metisMenu.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="/static/css/cms.css">
-{% endblock %}
+	<link rel="shortcut icon" href="/static/images/favicon.ico"/>
 
-{% block bootstrap3_content %}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+	{% compress css %}
+		{% require_ui_file 'bootstrap/dist/css/bootstrap.css' %}
+		{% require_ui_css 'metisMenu' %}
+		{% require_ui_css 'font-awesome' %}
+		{% block html_extra_head %}{% endblock %}
+		<link rel="stylesheet" href="/static/css/cms.css">
+	{% endcompress %}
+
+</head>
+
+<body>
+
+{% block body_content %}
     <div id="wrapper">
 
         <div class="navbar-default sidebar" role="navigation">
+			<img alt="logo" src="/static/images/logo.png">
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
                         <a href="#"><i class="fa fa-table fa-fw"></i> Models<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="mysql.html">RDBMS</a>
+                                <a href="{% url 'rdbms-home' %}">RDBMS</a>
                             </li>
                             <li>
-                                <a href="mongodb.html">NoSQL</a>
+                                <a href="nosql.html">NoSQL</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-puzzle-piece fa-fw"></i> APIs<span class="fa arrow"></span></a>
+                        <a href="api.hml"><i class="fa fa-puzzle-piece fa-fw"></i> APIs<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="api-views.html">Views</a>
@@ -40,6 +62,19 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
+                    <li>
+                        <a href="content.html"><i class="fa fa-file-text-o fa-fw"></i> Content</a>
+                    </li>                    
+                    <li>
+                        <a href="import.hml"><i class="fa fa-download fa-fw"></i> Import</a>
+                    </li>                    
+                    <li>
+                        <a href="export.html"><i class="fa fa-cloud-upload fa-fw"></i> Export</a>
+                    </li>                    
+                    <li>
+                        <a href="reports.html"><i class="fa fa-pie-chart fa-fw"></i> Report</a>
+                    </li>                    
+
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->
@@ -47,6 +82,7 @@
         <!-- /.navbar-static-side -->
         
         <div id="page-wrapper">
+        {% block tabs %}{% endblock %}
         {% block content %}(no content){% endblock %}
         </div>
         <!-- /#page-wrapper -->
@@ -56,10 +92,19 @@
 
 {% endblock %}
 
-{% block bootstrap3_extra_script %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.0.1/metisMenu.min.js"></script>
-{% endblock %}
+{% compress js %}
+	{% require_ui_js 'jquery' %}
+	{% require_ui_file 'bootstrap/dist/js/bootstrap.js' %}
+	{% require_ui_js 'metisMenu' %}	
+{% endcompress %}
 
-{% block bootstrap3_footer_extra_script %}
+{% comment %} This (body_footer_extra_script) block should not be inside compress tag, because not everything is compressible {% endcomment %}
+{% block body_footer_extra_script %}{% endblock %}
+
+{% compress js %}
 <script src="/static/js/cms.js"></script>
-{% endblock %}
+{% endcompress %}	
+
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+{% extends 'rdbms/rdbms-base.html' %}
+
+{% load cms_ui_tags %}
+{% load cms_ui_libs %}
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'rdbms-home' %}">RDBMS</a>
+            </li>
+            <li class="active">
+                <strong>Tabled Diagram</strong>
+            </li>
+        </ol>
+    </div>
+</div> 
+
+<div class="wrapper-content">
+	<div class="container-fluid">
+		{% for i in 10|get_range %}
+		<div class="col-lg-12">
+			<div class="cpanel">
+				<div class="panel-yellow cpanel-title">
+				    <h4><span class="editable editable_{{forloop.counter}}" data-type="text" data-pk="1" data-url="/post">{% random_real_word title=True %}&nbsp;</span></h4>
+				    <h5><i> ( extends</i> {% random_real_word title=True %}, {% random_real_word title=True %})</h5>
+					<div class="cpanel-tools">
+						<button type="button" class="btn btn-default btn-xs" disabled="disabled"><i class="fa fa-plus fa-fw"></i> Add Field</button>
+						<button type="button" class="btn btn-default btn-xs" onclick="$('.editable_{{forloop.counter}}').editable('toggleDisabled');"><i class="fa fa-wrench fa-fw"></i> Edit All Inline</button>
+						<button type="button" class="btn btn-default btn-xs" disabled="disabled"><i class="fa fa-gears fa-fw"></i> Advanced Edit</button>
+					</div>				    
+				</div>
+				<div class="cpanel-content">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th class="col-lg-3">Field Name</th>
+								<th class="col-lg-2">Field Type</th>
+								<th class="col-lg-1">Size</th>
+								<th class="col-lg-2">Default Value</th>
+								<th class="col-lg-4">Other</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for i in 20|get_random_range %}
+							<tr>
+								<td><span class="editable editable_{{forloop.parentloop.counter}}" data-type="text" data-pk="1" data-url="/post">{% random_string size=10 %}</span></td>
+								<td><span class="editable editable_{{forloop.parentloop.counter}}" data-type="text" data-pk="1" data-url="/post">{% random_string size=10 %}</span></td>
+								<td><span class="editable editable_{{forloop.parentloop.counter}}" data-type="text" data-pk="1" data-url="/post">{% random_number min=10 max=256 %}</span></td>
+								<td><span class="editable editable_{{forloop.parentloop.counter}}" data-type="text" data-pk="1" data-url="/post"></span></td>
+								<td><span class="editable editable_{{forloop.parentloop.counter}}" data-type="text" data-pk="1" data-url="/post"></span></td>
+							</tr>
+							{% endfor %}
+						</tbody>						
+					</table>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		
+		
+	</div>
+</div>
+
+{% endblock %}
+
+{% block html_extra_head %}
+	{{ block.super }}
+	{% require_ui_file 'x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css' %}
+{% endblock %}	
+
+{% block body_footer_extra_script %}
+	{{ block.super }}	
+	{% require_ui_file 'x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js' %}
+{% endblock %}      

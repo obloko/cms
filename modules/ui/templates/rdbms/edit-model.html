@@ -1,0 +1,21 @@
+{% extends 'rdbms/rdbms-base.html' %}
+
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'rdbms-home' %}">RDBMS</a>
+            </li>
+            <li class="active">
+                <strong>E-R Diagram</strong>
+            </li>
+        </ol>
+    </div>
+</div>      
+
+{% endblock %}      

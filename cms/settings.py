@@ -1,3 +1,4 @@
+import sys
 """
 Django settings for cms project.
 
@@ -31,7 +32,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     #'cms',
     'ui',
+    "compressor",
     'modules.schemas',
 )
 
@@ -112,7 +113,62 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'modules','ui','static')
 STATIC_URL = '/static/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+# Force enable, to test and make sure it works when django is NOT in DEBUG mode
+# By default, COMPRESS_ENABLED is set to NOT DEBUG
+#COMPRESS_ENABLED = True
+
+# Relative to STATIC_ROOT!
+JS_COMPONENTS_DIR = os.path.join('bower','components')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s.%(funcName)s: %(message)s'
+        },
+    },
+    'handlers': {
+        # 'default': {
+        #     'level':'DEBUG',
+        #     'class':'logging.FileHandler',
+        #     'filename': '/var/log/api/v3api.log',
+        #     'formatter':'standard',
+        # },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+            'stream': sys.stdout,
+        },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+    }
+}
+
 
 try:
     from cms.local_settings import *
