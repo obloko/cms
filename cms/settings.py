@@ -39,10 +39,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     'bootstrap3',
-    #'cms',
+    'schemas',
     'ui',
-    "compressor",
-    'modules.schemas',
+    'compressor',
+    'rest_framework',
+    'rest_framework_swagger',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,6 +90,7 @@ DATABASES = {
 
 MONGODB_DATABASES = {
     'schema' : { #Database
+        'disabled': True, # disabled because this is not fully configured
         'alias': '', # Alias
         'host': '', # Hosts, multiple for replica set and HA
         'replicaSet': '', # MongoReplicaSetClient will be used, instead of MongoClient by mongoengine
@@ -141,7 +143,7 @@ LOGGING = {
         # 'default': {
         #     'level':'DEBUG',
         #     'class':'logging.FileHandler',
-        #     'filename': '/var/log/api/v3api.log',
+        #     'filename': '/var/log/api/cms.log',
         #     'formatter':'standard',
         # },
         'console': {
