@@ -39,9 +39,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     'bootstrap3',
-    'cms',
+    #'cms',
     'ui',
-    'schemas',
+    'modules.schemas',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -87,10 +87,10 @@ DATABASES = {
 }
 
 MONGODB_DATABASES = {
-    '' : { #Database
-        'alias': '', # Alias
-        'host': '', # Hosts, multiple for replica set and HA
-        'replicaSet': '', # MongoReplicaSetClient will be used, instead of MongoClient by mongoengine
+    'schema' : { #Database
+        'alias': 'schema_alias', # Alias
+        'host': 'localhost', # Hosts, multiple for replica set and HA
+        #'replicaSet': '', # MongoReplicaSetClient will be used, instead of MongoClient by mongoengine
     },
 }
 
