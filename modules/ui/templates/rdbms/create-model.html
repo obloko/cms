@@ -71,7 +71,7 @@ Templates
     </tbody>
 </script>
 <script id="field-row-tmpl" type="text/template">
-    <td class="field-name">
+    <td class="field-name" data-name="<%-o.name %>">
         <%-o.name %>
     </td>
     <td>
@@ -91,7 +91,7 @@ Templates
         <% for (var name in o.kwargs) {%>
             <a class="btn btn-default" href="javascript:void(0)"><%-name %>: <%-o.kwargs[name] %></a>
         <% } %>
-        <a class="btn btn-default" href="javascript:void(0)">+</a>
+        <a class="btn btn-default btn-add-kwarg" href="javascript:void(0)">+</a>
     </td>
 </script>
 
@@ -188,29 +188,44 @@ Templates
 
                 $('.add-field-btn').click(showAddFieldForm);
 
+                //$(document).on('click','.btn-add-kwarg', showAddKwargForm);
             }
 
             function showAddFieldForm(){
                 var field = new Field();
                 var bbform = new Backbone.Form({model: field}).render();
-                var modal = new FieldModal({body: bbform.$el}).render();
+                var modal = showFormModal('Add Field', bbform.$el);
 
-                bbform.on('change', function(model, name) {
-                    console.log("change arguments:", arguments);
-                });
                 bbform.$el.on('submit', function(e) {
                     e.preventDefault();
                     var errors = bbform.commit();
-                    console.log("errors:", errors);
                     if (!errors){
-                        bbform.model.attributes.kwargs = JSON.parse(bbform.model.attributes.kwargs);
+                        //bbform.model.attributes.kwargs = JSON.parse(bbform.model.attributes.kwargs);
                         schema_fields.add(bbform.model);
                         modal.close();
                     }
                 });
             }
+
+            function showAddKwargForm(){
+                var field_model = this.model;
+                var fk = new FieldKwarg();
+                var bbform = new Backbone.Form({model: fk}).render();
+                var modal = showFormModal('Add Field Options', bbform.$el);
+                bbform.$el.on('submit', function(e) {
+                    e.preventDefault();
+                    var errors = bbform.commit();
+                    if (!errors){
+                        var attrs = field_model.get('kwargs') || {};
+                        attrs[bbform.model.get('name')] = bbform.model.get('value');
+                        field_model.set('kwargs',attrs);
+                        modal.close();
+                    }
+                });
+            }
+
             function validateJSON(s){
-                // retrn nothing if OK
+                // return nothing if OK
                 if (typeof(s) == 'string' && s.trim().length){
                     try {
                         JSON.parse(s);
@@ -222,40 +237,51 @@ Templates
                     }
                 }
             }
-            // Modals
-            var FieldModal = Backbone.ModalView.extend({
-                title: "<h3>Add Field</h3>",
-                buttons: [
-                    { className: "btn-default cancel", label: "Cancel", close: true },
-                    { className: "btn-primary save", label: "Save" }],
-                events: {
-                    "click .modal-footer a.save": "onSave",
-                    "click .modal-footer a.cancel": "onCancel",
-                    "hidden.bs.modal": "onHidden"
-                },
-                postRender: function() {
-                    // this.$body.append($h4).append($p);
-                    return this;
-                },
-                onSave: function(e) {
-                    e.preventDefault();
-                    this.$el.find('form').submit();
-                },
-                onCancel: function(e) {
-                    
-                },
-                onHidden: function(e) {
-                    
-                }
-            });
+
+            function showFormModal(title, body_element){
+                var M = Backbone.ModalView.extend({
+                    title: "<h3>"+title+"</h3>",
+                    buttons: [
+                        { className: "btn-default cancel", label: "Cancel", close: true },
+                        { className: "btn-primary save", label: "Save" }],
+                    events: {
+                        "click .modal-footer a.save": "onSave",
+                        "click .modal-footer a.cancel": "onCancel",
+                        "hidden.bs.modal": "onHidden"
+                    },
+                    postRender: function() {
+                        // this.$body.append($h4).append($p);
+                        return this;
+                    },
+                    onSave: function(e) {
+                        e.preventDefault();
+                        this.$el.find('form').submit();
+                    },
+                    onCancel: function(e) {
+                        
+                    },
+                    onHidden: function(e) {
+                        
+                    }
+                });
+                return new M({body: body_element}).render();
+            }
             
             // Models
+            var FieldKwarg = Backbone.Model.extend({
+                // schema is for backbone-forms
+                schema: {
+                    name: 'Text',
+                    value: 'Text',
+                },
+            });
+
             var Field = Backbone.Model.extend({
                 // schema is for backbone-forms
                 schema: {
                     name: { type: 'Text', validators: ['required'] },
                     kind: { type: 'Select', validators: ['required'], options: FIELD_TYPES },
-                    kwargs: { type:'Text', validators:[validateJSON] }
+                    //kwargs: { type:'Text', validators:[validateJSON] }
                 }
             });
 
@@ -270,7 +296,10 @@ Templates
                 className: 'field-row',
                 initialize: function(){ console.log('FieldView: initialize ' + this.model.get('name')) },
                 onRender: function(){ console.log('FieldView: onRender ' + this.model.get('name')) },
-                onShow: function(){ console.log('FieldView: onShow ' + this.model.get('name')) }
+                onShow: function(){ console.log('FieldView: onShow ' + this.model.get('name')) },
+                events: {
+                    'click .btn-add-kwarg': showAddKwargForm
+                }
             });
             var FieldListView = Backbone.Marionette.CollectionView.extend({
                 id: 'field-list',
