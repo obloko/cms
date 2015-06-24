@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     'bootstrap3',
-    'schemas',
+    'modules.schemas',
     'ui',
     'compressor',
     'rest_framework',
