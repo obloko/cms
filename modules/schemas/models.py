@@ -2,7 +2,7 @@
 from mongoengine import document, fields as me_fields
 
 
-class Djangome_fieldschema(document.EmbeddedDocument):
+class DjangoFieldSchema(document.EmbeddedDocument):
     """
     Represents a Django Field and its options
     """
@@ -24,11 +24,11 @@ class DjangoModelSchema(document.Document):
     name = me_fields.StringField()
     app_name = me_fields.StringField()
     module = me_fields.StringField()
-    fields = me_fields.ListField(me_fields.EmbeddedDocumentField(Djangome_fieldschema))
-    relations = me_fields.ListField(me_fields.EmbeddedDocumentField(Djangome_fieldschema))
+    fields = me_fields.ListField(me_fields.EmbeddedDocumentField(DjangoFieldSchema))
+    relations = me_fields.ListField(me_fields.EmbeddedDocumentField(DjangoFieldSchema))
     # ['BoincBaseModel', 'TerritoryModelMixin']
     inheritance = me_fields.ListField(me_fields.StringField())
     # [dict(name='objects', manager='ActiveManager')]
-    managers = me_fields.ListField(me_fields.EmbeddedDocumentField(Djangome_fieldschema))
+    managers = me_fields.ListField(me_fields.EmbeddedDocumentField(DjangoFieldSchema))
     # inner class Meta:
     metadata = me_fields.DictField()
