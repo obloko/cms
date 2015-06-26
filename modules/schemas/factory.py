@@ -43,7 +43,7 @@ def create_model(django_model_schema):
 
     # Generate the Fields, Relationships and Managers.
     attributes = collections.OrderedDict()
-    schema_attrs = django_model_schema.attributes
+    schema_attrs = django_model_schema.fields
     schema_rels = django_model_schema.relations
     schema_managers = django_model_schema.managers
 

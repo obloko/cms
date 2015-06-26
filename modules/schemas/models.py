@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-from mongoengine import document, fields
+from mongoengine import document, fields as me_fields
 
 
-class DjangoFieldSchema(document.EmbeddedDocument):
+class Djangome_fieldschema(document.EmbeddedDocument):
     """
     Represents a Django Field and its options
     """
-    name = fields.StringField()
-    kind = fields.StringField()
-    args = fields.ListField(fields.StringField())
-    kwargs = fields.DictField()
+    name = me_fields.StringField()
+    kind = me_fields.StringField()
+    args = me_fields.ListField(me_fields.StringField())
+    kwargs = me_fields.DictField()
 
 
 class DjangoModelSchema(document.Document):
@@ -21,14 +21,14 @@ class DjangoModelSchema(document.Document):
         "db_alias": "schema_alias",
         "collection": "model_schemas"
     }
-    name = fields.StringField()
-    app_name = fields.StringField()
-    module = fields.StringField()
-    attributes = fields.ListField(fields.EmbeddedDocumentField(DjangoFieldSchema))
-    relations = fields.ListField(fields.EmbeddedDocumentField(DjangoFieldSchema))
+    name = me_fields.StringField()
+    app_name = me_fields.StringField()
+    module = me_fields.StringField()
+    fields = me_fields.ListField(me_fields.EmbeddedDocumentField(Djangome_fieldschema))
+    relations = me_fields.ListField(me_fields.EmbeddedDocumentField(Djangome_fieldschema))
     # ['BoincBaseModel', 'TerritoryModelMixin']
-    inheritance = fields.ListField(fields.StringField())
+    inheritance = me_fields.ListField(me_fields.StringField())
     # [dict(name='objects', manager='ActiveManager')]
-    managers = fields.ListField(fields.EmbeddedDocumentField(DjangoFieldSchema))
+    managers = me_fields.ListField(me_fields.EmbeddedDocumentField(Djangome_fieldschema))
     # inner class Meta:
-    metadata = fields.DictField()
+    metadata = me_fields.DictField()
