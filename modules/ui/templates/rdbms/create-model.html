@@ -175,9 +175,7 @@ Templates
                   fields_region: '#fields-tab'
                 });
                 app.addInitializer(function(options){
-                    var view = new FieldListView({
-                        collection: options.fields
-                    });
+                    var view = new FieldListView({ collection: options.fields });
                     app.fields_region.show(view);
                 });
 
@@ -216,7 +214,8 @@ Templates
                     e.preventDefault();
                     var errors = bbform.commit();
                     if (!errors){
-                        var attrs = field_model.get('kwargs') || {};
+                        // You have to clone existing kwargs object, else Backbone won't detect change on the model!
+                        var attrs = _.clone(field_model.get('kwargs') || {});
                         attrs[bbform.model.get('name')] = bbform.model.get('value');
                         field_model.set('kwargs',attrs);
                         modal.close();
@@ -294,12 +293,11 @@ Templates
                 template: '#field-row-tmpl',
                 tagName: 'tr',
                 className: 'field-row',
-                initialize: function(){ console.log('FieldView: initialize ' + this.model.get('name')) },
-                onRender: function(){ console.log('FieldView: onRender ' + this.model.get('name')) },
-                onShow: function(){ console.log('FieldView: onShow ' + this.model.get('name')) },
                 events: {
                     'click .btn-add-kwarg': showAddKwargForm
-                }
+                },
+                // This causes view to update when model changes, it doesn't happen automatically
+                modelEvents: { "change": "render"},
             });
             var FieldListView = Backbone.Marionette.CollectionView.extend({
                 id: 'field-list',
@@ -307,12 +305,11 @@ Templates
                 className: "table borderless",
                 template: "#field-list-tmpl",
                 childView: FieldView,
-                appendHtml: function(collectionView, itemView){
-                    collectionView.$("tbody").append(itemView.el);
-                },
-                initialize: function(){ console.log('FieldListView: initialize') },
-                onRender: function(){ console.log('FieldListView: onRender') },
-                onShow: function(){ console.log('FieldListView: onShow') }
+                // Collection view seems to update automatically without these events hooked up! Why!
+                // modelEvents: { "change": "render"},
+                // appendHtml: function(collectionView, itemView){
+                //     collectionView.$("tbody").append(itemView.el);
+                // },
             });
 
             init();
