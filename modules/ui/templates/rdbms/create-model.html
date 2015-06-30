@@ -7,6 +7,8 @@
 	{% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
 
 	<style type="text/css">
+        .table tbody tr td { border-top: none; padding: 3px;  }
+        .table > thead > tr > th { bottom; border-bottom: none; padding-bottom: 1.5em; }
 	    #fields table .field-name { font-size: 1.2em; }
 	    .selected-options a.btn { color: #424242; font-size: 1.2em; background: #c1c1c1; padding: 6px 13px; float: left; margin-right: 10px; }
 	    .selected-options a.btn:hover { text-decoration: none; background: #5cb85c; }
@@ -89,7 +91,7 @@ Templates
     </td>
     <td class="selected-options">
         <% for (var name in o.kwargs) {%>
-            <a class="btn btn-default" href="javascript:void(0)"><%-name %>: <%-o.kwargs[name] %></a>
+            <a class="btn btn-default btn-edit-kwarg" data-name="<%-name %>" href="javascript:void(0)"><%-name %>: <%-o.kwargs[name] %></a>
         <% } %>
         <a class="btn btn-default btn-add-kwarg" href="javascript:void(0)">+</a>
     </td>
@@ -209,7 +211,7 @@ Templates
                 var field_model = this.model;
                 var fk = new FieldKwarg();
                 var bbform = new Backbone.Form({model: fk}).render();
-                var modal = showFormModal('Add Field Options', bbform.$el);
+                var modal = showFormModal('Add Field Option', bbform.$el);
                 bbform.$el.on('submit', function(e) {
                     e.preventDefault();
                     var errors = bbform.commit();
@@ -217,6 +219,30 @@ Templates
                         // You have to clone existing kwargs object, else Backbone won't detect change on the model!
                         var attrs = _.clone(field_model.get('kwargs') || {});
                         attrs[bbform.model.get('name')] = bbform.model.get('value');
+                        field_model.set('kwargs',attrs);
+                        modal.close();
+                    }
+                });
+            }
+
+            function showEditKwargForm(e){
+                var field_model = this.model;
+                var $btn = $(e.target)
+                var name = $btn.data('name');
+                var value = field_model.get('kwargs')[name];
+                var fk = new FieldKwarg({name:name,value:value});
+                var bbform = new Backbone.Form({model: fk}).render();
+                var modal = showFormModal('Edit Field Option', bbform.$el);
+                bbform.$el.on('submit', function(e) {
+                    e.preventDefault();
+                    var errors = bbform.commit();
+                    if (!errors){
+                        // You have to clone existing kwargs object, else Backbone won't detect change on the model!
+                        var attrs = _.clone(field_model.get('kwargs') || {});
+                        var new_name = bbform.model.get('name');
+                        if (new_name!=name)
+                            delete attrs[name];attrs
+                        attrs[new_name] = bbform.model.get('value');
                         field_model.set('kwargs',attrs);
                         modal.close();
                     }
@@ -294,22 +320,18 @@ Templates
                 tagName: 'tr',
                 className: 'field-row',
                 events: {
-                    'click .btn-add-kwarg': showAddKwargForm
+                    'click .btn-add-kwarg': showAddKwargForm,
+                    'click .btn-edit-kwarg': showEditKwargForm,
                 },
                 // This causes view to update when model changes, it doesn't happen automatically
                 modelEvents: { "change": "render"},
             });
-            var FieldListView = Backbone.Marionette.CollectionView.extend({
+            var FieldListView = Backbone.Marionette.CompositeView.extend({
                 id: 'field-list',
                 tagName: 'table',
                 className: "table borderless",
                 template: "#field-list-tmpl",
                 childView: FieldView,
-                // Collection view seems to update automatically without these events hooked up! Why!
-                // modelEvents: { "change": "render"},
-                // appendHtml: function(collectionView, itemView){
-                //     collectionView.$("tbody").append(itemView.el);
-                // },
             });
 
             init();
