@@ -4,12 +4,14 @@
 
 {% block html_extra_head %}
 	{{ block.super }}
-	{% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
+    {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
 
 	<style type="text/css">
         .table tbody tr td { border-top: none; padding: 3px;  }
         .table > thead > tr > th { bottom; border-bottom: none; padding-bottom: 1.5em; }
-	    #fields table .field-name { font-size: 1.2em; }
+        .field-list .field-name input { font-size: 1.2em; border: 1px solid white;}
+        .field-list .field-name input:active { border-color: gray;}
+	    .field-list input.changed { border-bottom: 1px dotted red;}
 	    .selected-options a.btn { color: #424242; font-size: 1.2em; background: #c1c1c1; padding: 6px 13px; float: left; margin-right: 10px; }
 	    .selected-options a.btn:hover { text-decoration: none; background: #5cb85c; }
 	
@@ -74,20 +76,16 @@ Templates
 </script>
 <script id="field-row-tmpl" type="text/template">
     <td class="field-name" data-name="<%-o.name %>">
-        <%-o.name %>
+        <input type="text" value="<%-o.name %>"/>
     </td>
     <td>
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                <%-o.kind %>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <% for (var i in FIELD_TYPES) { %>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><%-FIELD_TYPES[i]%></a></li>
-                <% } %>
-            </ul>
-        </div>
+        <select class="form-control">
+            <% for (var i in FIELD_TYPES) { %>
+                <option <% if (FIELD_TYPES[i]==o.kind){ %>selected=1<% } %> >
+                    <%-FIELD_TYPES[i]%>
+                </option>
+            <% } %>
+        </select>
     </td>
     <td class="selected-options">
         <% for (var name in o.kwargs) {%>
@@ -109,27 +107,30 @@ Templates
 	    {% require_ui_file 'backbone-forms/distribution/adapters/backbone.bootstrap-modal.js' %}
 	    {% require_ui_file 'backbone-forms/distribution/editors/list.js' %}
         {% require_ui_file 'custom/backbone-modal.js' %}
-    
+        {% require_ui_lib 'backbone.trackit' %}
+
         <script type="text/javascript">
 
         // TODO: need a way to get all available field types
         var FIELD_TYPES = [
-            'Text Field',
-            'Char Field',
-            'Boolean Field',
-            'File Field',
+            'TextField',
+            'CharField',
+            'DateTimeField',
+            'BooleanField',
+            'FileField',
+            'ForeignKey',
         ];
 
         var current_schema = {
             "name" : "Album",
             "app_name" : "album",
             "module" : "modules.album",
-            "attributes" : [ 
+            "fields" : [ 
                 {
                     "name" : "first_name",
                     "kind" : "CharField",
                     "args" : [],
-                    "kwargs" : {}
+                    "kwargs" : {},
                 }, 
                 {
                     "name" : "date_joined",
@@ -137,7 +138,7 @@ Templates
                     "args" : [],
                     "kwargs" : {
                         "auto_now_add" : true
-                    }
+                    },
                 }
             ],
             "relations" : [ 
@@ -182,13 +183,19 @@ Templates
                 });
 
                 // Dummy data
-                schema_fields = new FieldList(_.union(current_schema.attributes,current_schema.relations));
+                schema_fields = new FieldList(_.union(current_schema.fields,current_schema.relations));
 
                 app.start({fields: schema_fields});
 
                 $('.add-field-btn').click(showAddFieldForm);
 
                 //$(document).on('click','.btn-add-kwarg', showAddKwargForm);
+            }
+
+            function editFieldName(e){
+                var input = $(e.target);
+                var model = this.model;
+                model.set('name',input.val())
             }
 
             function showAddFieldForm(){
@@ -200,7 +207,6 @@ Templates
                     e.preventDefault();
                     var errors = bbform.commit();
                     if (!errors){
-                        //bbform.model.attributes.kwargs = JSON.parse(bbform.model.attributes.kwargs);
                         schema_fields.add(bbform.model);
                         modal.close();
                     }
@@ -307,7 +313,10 @@ Templates
                     name: { type: 'Text', validators: ['required'] },
                     kind: { type: 'Select', validators: ['required'], options: FIELD_TYPES },
                     //kwargs: { type:'Text', validators:[validateJSON] }
-                }
+                },
+                // unsaved: { unloadWindowPrompt: true, },
+                initialize: function(){ this.startTracking(); },
+                save: function(){ this.restartTracking(); },
             });
 
             var FieldList = Backbone.Collection.extend({
@@ -320,6 +329,7 @@ Templates
                 tagName: 'tr',
                 className: 'field-row',
                 events: {
+                    'blur .field-name input': editFieldName,
                     'click .btn-add-kwarg': showAddKwargForm,
                     'click .btn-edit-kwarg': showEditKwargForm,
                 },
@@ -327,9 +337,8 @@ Templates
                 modelEvents: { "change": "render"},
             });
             var FieldListView = Backbone.Marionette.CompositeView.extend({
-                id: 'field-list',
                 tagName: 'table',
-                className: "table borderless",
+                className: "table borderless field-list",
                 template: "#field-list-tmpl",
                 childView: FieldView,
             });

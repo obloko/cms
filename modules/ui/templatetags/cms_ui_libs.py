@@ -37,7 +37,11 @@ def _require_ui_lib(context, lib, filter_type=('.js','.css')):
     context[libs_var] = libs
     files = _get_lib_files(lib, exclude=libs, filter_type=filter_type)
     libs += files
-    return '<!-- %s -->\n%s' % (lib,_get_files_html(files))
+    if files:
+        html = _get_files_html(files)
+    else:
+        html = '<script>if (window.console) console.error("_require_ui_lib: Could not find library named \'%s\'");</script>' % lib
+    return '<!-- %s -->\n%s' % (lib,html)
 
 
 def _get_lib_files(name, version=0, libs=None, exclude=[], filter_type=('.js','.css')):
