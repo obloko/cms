@@ -1,0 +1,7 @@
+.table tbody tr td { border-top: none; padding: 3px;  }
+.table > thead > tr > th { bottom; border-bottom: none; padding-bottom: 1.5em; }
+.field-list .field-name input { font-size: 1.2em; border: 1px solid white;}
+.field-list .field-name input:active { border-color: gray;}
+.field-list input.changed { border-bottom: 1px dotted red;}
+.selected-options a.btn { color: #424242; font-size: 1.2em; background: #c1c1c1; padding: 6px 13px; float: left; margin-right: 10px; }
+.selected-options a.btn:hover { text-decoration: none; background: #5cb85c; }

@@ -40,7 +40,7 @@ def _require_ui_lib(context, lib, filter_type=('.js','.css')):
     if files:
         html = _get_files_html(files)
     else:
-        html = '<script>if (window.console) console.error("_require_ui_lib: Could not find library named \'%s\'");</script>' % lib
+        html = '<script>if (window.console) console.error("_require_ui_lib: Could not find library named \'%s\'. filter_type=%s");</script>' % (lib,filter_type)
     return '<!-- %s -->\n%s' % (lib,html)
 
 
@@ -50,13 +50,15 @@ def _get_lib_files(name, version=0, libs=None, exclude=[], filter_type=('.js','.
     '''
     if libs is None:
         libs = []
-    rpath = os.path.join(settings.STATIC_ROOT, settings.JS_COMPONENTS_DIR, name)
-    
-    if os.path.exists(rpath):
+
+    comps_dir = os.path.join(settings.STATIC_ROOT, settings.JS_COMPONENTS_DIR)
+    lib_path = os.path.join(comps_dir, name)
+
+    if os.path.exists(lib_path):
 
         # find package file
         for p in ('bower.json','package.json'):
-            pkg_file = os.path.join(rpath, p)
+            pkg_file = os.path.join(lib_path, p)
             if os.path.exists(pkg_file):
                 break
 
@@ -74,20 +76,27 @@ def _get_lib_files(name, version=0, libs=None, exclude=[], filter_type=('.js','.
             main_files = pkg.get('browser', pkg.get('main',[]))
             if not main_files:
                 _log.error("Don't know what files to include for %s" % name)
-            
+                return libs
             elif type(main_files) is not list:
                 main_files = [main_files]
+
+            # Our extension of bower.json lets us specificy individual files from other libs to include
+            file_deps = [os.path.join(comps_dir,cf.strip('./')) for cf in pkg.get('cms_file_dependencies',[])]
+
+            # make sure file_deps are listed before main files
+            main_files = file_deps + [os.path.join(lib_path,mf.strip('./')) for mf in main_files]
+            
 
             for mf in main_files:
                 # Cheap way to ignore .less files, etc
                 if not filter_type or any([mf.endswith(t) for t in filter_type]):
-                    mfp = os.path.join(rpath,mf.strip('./'))
                     # Make sure this lib is not already in the list
-                    if mfp not in libs and mfp not in exclude:
-                        libs.append(mfp)
-
+                    if mf not in libs and mf not in exclude:
+                        print "mf:", mf
+                        libs.append(mf)
     else:
         _log.error('Could not find lib %s' % name)
+
     return libs
 
 def _get_files_html(files):

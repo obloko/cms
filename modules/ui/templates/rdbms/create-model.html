@@ -5,18 +5,7 @@
 {% block html_extra_head %}
 	{{ block.super }}
     {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.css' %}
-
-	<style type="text/css">
-        .table tbody tr td { border-top: none; padding: 3px;  }
-        .table > thead > tr > th { bottom; border-bottom: none; padding-bottom: 1.5em; }
-        .field-list .field-name input { font-size: 1.2em; border: 1px solid white;}
-        .field-list .field-name input:active { border-color: gray;}
-	    .field-list input.changed { border-bottom: 1px dotted red;}
-	    .selected-options a.btn { color: #424242; font-size: 1.2em; background: #c1c1c1; padding: 6px 13px; float: left; margin-right: 10px; }
-	    .selected-options a.btn:hover { text-decoration: none; background: #5cb85c; }
-	
-	</style>
-
+    {% require_ui_css 'cms-models-edit' %}
 {% endblock %}
 
 {% block content %}
@@ -51,8 +40,12 @@
 			            <div id="fields-tab" class="tab-pane active" role="tabpanel"></div>
 			            <div id="options-tab" class="tab-pane" role="tabpanel"></div>
 			        	<button class="btn btn-primary add-field-btn">Add Field</button>
-			        </div>
-			    </div>
+                        
+                        <div id="unsaved-changes">
+                            
+                        </div>
+                    </div>
+                </div>
 		    </div>
 	    </div>
 	</div>
@@ -60,7 +53,7 @@
 
 <!---
 
-Templates
+Templates - need a convention for sharing these across files?
 
 -->
 <script id="field-list-tmpl" type="text/template">
@@ -74,6 +67,7 @@ Templates
     <tbody>
     </tbody>
 </script>
+
 <script id="field-row-tmpl" type="text/template">
     <td class="field-name" data-name="<%-o.name %>">
         <input type="text" value="<%-o.name %>"/>
@@ -93,260 +87,19 @@ Templates
         <% } %>
         <a class="btn btn-default btn-add-kwarg" href="javascript:void(0)">+</a>
     </td>
+    <td>
+        <a href="javascript:void(0)" class="glyphicon glyphicon-duplicate btn-dupe-field"></a>
+        <a href="javascript:void(0)" class="glyphicon glyphicon-remove btn-delete-field"></a>
+
+    </td>
 </script>
 
 {% endblock %}
 
 {% block body_footer_extra_script %}
     {% compress js %}
-	    {{ block.super }}
-	    
-	    {% require_ui_js 'marionette' %}
-	    {% require_ui_js 'backbone-forms' %}
-	    {% require_ui_file 'backbone-forms/distribution/templates/bootstrap3.js' %}
-	    {% require_ui_file 'backbone-forms/distribution/adapters/backbone.bootstrap-modal.js' %}
-	    {% require_ui_file 'backbone-forms/distribution/editors/list.js' %}
-        {% require_ui_file 'custom/backbone-modal.js' %}
-        {% require_ui_lib 'backbone.trackit' %}
-
-        <script type="text/javascript">
-
-        // TODO: need a way to get all available field types
-        var FIELD_TYPES = [
-            'TextField',
-            'CharField',
-            'DateTimeField',
-            'BooleanField',
-            'FileField',
-            'ForeignKey',
-        ];
-
-        var current_schema = {
-            "name" : "Album",
-            "app_name" : "album",
-            "module" : "modules.album",
-            "fields" : [ 
-                {
-                    "name" : "first_name",
-                    "kind" : "CharField",
-                    "args" : [],
-                    "kwargs" : {},
-                }, 
-                {
-                    "name" : "date_joined",
-                    "kind" : "DateTimeField",
-                    "args" : [],
-                    "kwargs" : {
-                        "auto_now_add" : true
-                    },
-                }
-            ],
-            "relations" : [ 
-                {
-                    "name" : "album",
-                    "kind" : "ForeignKey",
-                    "args" : [ 
-                        "self"
-                    ],
-                    "kwargs" : {}
-                }
-            ],
-            "inheritance" : [ 
-                "Model"
-            ],
-            "managers" : [ 
-                {
-                    "name" : "objects",
-                    "kind" : "Manager",
-                    "args" : [],
-                    "kwargs" : {}
-                }
-            ],
-            "metadata" : {
-                "managed" : false,
-                "verbose_name" : "Album model"
-            }
-        };
-
-        $(function(){
-            var schema_fields;
-            function init(){
-                _.templateSettings.variable = "o";
-                
-                var app = new Backbone.Marionette.Application();
-                app.addRegions({
-                  fields_region: '#fields-tab'
-                });
-                app.addInitializer(function(options){
-                    var view = new FieldListView({ collection: options.fields });
-                    app.fields_region.show(view);
-                });
-
-                // Dummy data
-                schema_fields = new FieldList(_.union(current_schema.fields,current_schema.relations));
-
-                app.start({fields: schema_fields});
-
-                $('.add-field-btn').click(showAddFieldForm);
-
-                //$(document).on('click','.btn-add-kwarg', showAddKwargForm);
-            }
-
-            function editFieldName(e){
-                var input = $(e.target);
-                var model = this.model;
-                model.set('name',input.val())
-            }
-
-            function showAddFieldForm(){
-                var field = new Field();
-                var bbform = new Backbone.Form({model: field}).render();
-                var modal = showFormModal('Add Field', bbform.$el);
-
-                bbform.$el.on('submit', function(e) {
-                    e.preventDefault();
-                    var errors = bbform.commit();
-                    if (!errors){
-                        schema_fields.add(bbform.model);
-                        modal.close();
-                    }
-                });
-            }
-
-            function showAddKwargForm(){
-                var field_model = this.model;
-                var fk = new FieldKwarg();
-                var bbform = new Backbone.Form({model: fk}).render();
-                var modal = showFormModal('Add Field Option', bbform.$el);
-                bbform.$el.on('submit', function(e) {
-                    e.preventDefault();
-                    var errors = bbform.commit();
-                    if (!errors){
-                        // You have to clone existing kwargs object, else Backbone won't detect change on the model!
-                        var attrs = _.clone(field_model.get('kwargs') || {});
-                        attrs[bbform.model.get('name')] = bbform.model.get('value');
-                        field_model.set('kwargs',attrs);
-                        modal.close();
-                    }
-                });
-            }
-
-            function showEditKwargForm(e){
-                var field_model = this.model;
-                var $btn = $(e.target)
-                var name = $btn.data('name');
-                var value = field_model.get('kwargs')[name];
-                var fk = new FieldKwarg({name:name,value:value});
-                var bbform = new Backbone.Form({model: fk}).render();
-                var modal = showFormModal('Edit Field Option', bbform.$el);
-                bbform.$el.on('submit', function(e) {
-                    e.preventDefault();
-                    var errors = bbform.commit();
-                    if (!errors){
-                        // You have to clone existing kwargs object, else Backbone won't detect change on the model!
-                        var attrs = _.clone(field_model.get('kwargs') || {});
-                        var new_name = bbform.model.get('name');
-                        if (new_name!=name)
-                            delete attrs[name];attrs
-                        attrs[new_name] = bbform.model.get('value');
-                        field_model.set('kwargs',attrs);
-                        modal.close();
-                    }
-                });
-            }
-
-            function validateJSON(s){
-                // return nothing if OK
-                if (typeof(s) == 'string' && s.trim().length){
-                    try {
-                        JSON.parse(s);
-                    } catch (e){
-                        return {
-                            type: 'json',
-                            message: 'JSON ' + String(e)
-                        };
-                    }
-                }
-            }
-
-            function showFormModal(title, body_element){
-                var M = Backbone.ModalView.extend({
-                    title: "<h3>"+title+"</h3>",
-                    buttons: [
-                        { className: "btn-default cancel", label: "Cancel", close: true },
-                        { className: "btn-primary save", label: "Save" }],
-                    events: {
-                        "click .modal-footer a.save": "onSave",
-                        "click .modal-footer a.cancel": "onCancel",
-                        "hidden.bs.modal": "onHidden"
-                    },
-                    postRender: function() {
-                        // this.$body.append($h4).append($p);
-                        return this;
-                    },
-                    onSave: function(e) {
-                        e.preventDefault();
-                        this.$el.find('form').submit();
-                    },
-                    onCancel: function(e) {
-                        
-                    },
-                    onHidden: function(e) {
-                        
-                    }
-                });
-                return new M({body: body_element}).render();
-            }
-            
-            // Models
-            var FieldKwarg = Backbone.Model.extend({
-                // schema is for backbone-forms
-                schema: {
-                    name: 'Text',
-                    value: 'Text',
-                },
-            });
-
-            var Field = Backbone.Model.extend({
-                // schema is for backbone-forms
-                schema: {
-                    name: { type: 'Text', validators: ['required'] },
-                    kind: { type: 'Select', validators: ['required'], options: FIELD_TYPES },
-                    //kwargs: { type:'Text', validators:[validateJSON] }
-                },
-                // unsaved: { unloadWindowPrompt: true, },
-                initialize: function(){ this.startTracking(); },
-                save: function(){ this.restartTracking(); },
-            });
-
-            var FieldList = Backbone.Collection.extend({
-                model: Field
-            });
-
-            // Views
-            var FieldView = Backbone.Marionette.ItemView.extend({
-                template: '#field-row-tmpl',
-                tagName: 'tr',
-                className: 'field-row',
-                events: {
-                    'blur .field-name input': editFieldName,
-                    'click .btn-add-kwarg': showAddKwargForm,
-                    'click .btn-edit-kwarg': showEditKwargForm,
-                },
-                // This causes view to update when model changes, it doesn't happen automatically
-                modelEvents: { "change": "render"},
-            });
-            var FieldListView = Backbone.Marionette.CompositeView.extend({
-                tagName: 'table',
-                className: "table borderless field-list",
-                template: "#field-list-tmpl",
-                childView: FieldView,
-            });
-
-            init();
-        });
-
-        </script>
+	    {{ block.super }}	    
+        {% require_ui_js 'cms-models-edit' %}
     {% endcompress %}
 
 {% endblock %}          

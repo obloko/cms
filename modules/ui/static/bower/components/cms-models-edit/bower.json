@@ -1,0 +1,42 @@
+{
+  "name": "cms-models-edit",
+  "version": "0.0.1",
+  "homepage": "",
+  "authors": [
+    "Matt Shaw <m@extc.co>"
+  ],
+  "description": "",
+  "keywords": [],
+  "main": [
+    "models.js",
+    "view.js",
+    "styles.css"
+  ],
+  "cms_file_dependencies": [
+    "backbone-forms/distribution/templates/bootstrap3.js",
+    "backbone-forms/distribution/adapters/backbone.bootstrap-modal.js",
+    "backbone-forms/distribution/editors/list.js",
+    "custom/backbone-modal.js"
+  ],
+  "dependencies": {
+    "marionette": "~2.4.2",
+    "backbone-forms": "~0.14.0",
+    "backbone.trackit": ">0"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "public",
+    "specs",
+    ".gitignore",
+    ".jshintrc",
+    ".travis.yml",
+    "Gruntfile.js",
+    "component.json",
+    "package.json"
+  ]
+}
