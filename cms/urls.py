@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
+from django.conf import settings
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),
     
     url(r'^swagger/', include('rest_framework_swagger.urls')),
+    url(r'^docs/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.DOCS_STATIC_ROOT,}),
 ]

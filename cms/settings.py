@@ -118,6 +118,8 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'modules','ui','static')
 STATIC_URL = '/static/'
 
+DOCS_STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'documentation','build','html')
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
